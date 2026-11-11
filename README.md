@@ -7,30 +7,32 @@
 | Field | Detail |
 | --- | --- |
 | **Name** | Erica Gyamfuaa Fordjour |
-| **Program/Batch** | Networkwalks Cybersecurity & Ethical Hacking Internship, [batch number] |
+| **Program/Batch** | Networkwalks Cybersecurity & Ethical Hacking Internship, B084 |
 | **Date** | 11 November 2026 |
 | **Modules completed** | W2-PM1 (Footprinting with 6 Kali tools)<br>W2-PM4 (theHarvester footprinting)<br>W2-PM5 (Zenmap network scanning) |
 | **Targets** | 1. networkwalks.com (assigned in the PM1 task)<br>2. microsoft.com (assigned in the PM4 task, passive public sources only)<br>3. My own home network (192.168.0.0/24) |
 | **Permission secured?** | Yes |
+|  **Phases covered** | Phase 1: Reconnaissance & Footprinting <br> Phase 2: Scanning & Network Discovery <br> Phase 3-5: In Progress|
 | **Lab** | Kali Linux 2026.2 in VirtualBox 7.2.22 (Week 1 lab); Windows 11 host for Zenmap |
 
 ---
 
-## 1. Disclaimer
+## 1. Liability Disclaimer
 
-All activities in this report were done for education. Active tools (WHOIS, WhatWeb, Nslookup, Curl, Wafw00f, DNSRecon) were used only on the domain assigned in the program task. The theHarvester work used public data sources only and did not send scans to microsoft.com. The network scan was done only on my own home network. Do not use these techniques on systems you do not own or have permission to test. Unauthorized access is illegal.
+I have performed these activities only on the systems & devices where I had secured written permission or the devices/systems that I own myself. All these materials are for education and research purpose only. Do not use anything from here to break the law. 
+Active tools (WHOIS, WhatWeb, Nslookup, Curl, Wafw00f, DNSRecon) were used only on the domain assigned in the program task. The theHarvester work used public data sources only and did not send scans to microsoft.com. The network scan was done only on my own home network. Do not use these techniques on systems you do not own or have permission to test. Unauthorized access is illegal.
+
 
 ## 2. Introduction
 
-This report covers three Week 2 modules:
+This report covers foot printing the networkwalks.com domain using multiple Kali Linux tools (W2-PM1) and scanning my own local network with Zenmap (W2-PM5). One module covers the footprinting phase and the other covers the scanning phase, so together they show how an attacker moves from gathering public information to mapping live hosts on a network. All commands were run in Kali Linux (footprinting), harvesters on kali Linux and on a Windows PC with Zenmap installed (scanning).
 
+It is the Week 2 part of my ongoing internship program at Networkwalks.
 - **W2-PM1:** footprinting `networkwalks.com` with six Kali Linux tools.
 - **W2-PM4:** collecting emails and subdomains for `microsoft.com` with theHarvester.
 - **W2-PM5:** finding live hosts on my own network with Zenmap.
 
-Footprinting gathers information about a target. Scanning then finds which systems are alive. Together they show how an attacker builds a picture of a target before any attack.
 
-Each section below gives the command, the result, the evidence screenshot and why it matters.
 
 ## 3. Tools Used
 
@@ -38,19 +40,20 @@ Each section below gives the command, the result, the evidence screenshot and wh
 | --- | --- |
 | Kali Linux 2026.2 | Attacker machine for footprinting |
 | Windows 11 | Host used for Zenmap scanning |
-| WHOIS | Domain registration details |
-| WhatWeb | Identify web technologies |
-| Nslookup | Resolve a domain to an IP |
+| WHOIS | Domain registration details (owner, dates, name servers) |
+| WhatWeb | Identify web technologies (server, CMS, plugins, IP) |
+| Nslookup | Resolve a domain to an IP address using DNS |
 | Curl `-I` | Read HTTP response headers |
 | Wafw00f | Detect a Web Application Firewall |
-| DNSRecon | List DNS records |
+| DNSRecon | List DNS records (NS, MX, SPF, TXT, SRV) |
 | theHarvester 4.10.1 | Collect emails, subdomains and hosts from public sources |
 | Zenmap 7.991 (Nmap GUI) | Find live hosts and draw a network topology |
 | ipconfig | Find local IP, mask and gateway |
 
 ## 4. Activities Performed
 
-### 4.1 W2-PM1: Footprinting networkwalks.com
+### 4.1 Footprinting & Reconnaissance (networkwalks.com)
+I performed reconnaissance against the networkwalks.com domain using six Kali Linux tools: WHOIS, WhatWeb, Nslookup, Curl, Wafw00f and DNSRecon. Each tool was used to collect a different type of information about the target.
 
 #### Tool 1: WHOIS
 
@@ -70,8 +73,7 @@ whois networkwalks.com
 
 **Why it matters:** the name servers point to HostGator, so the site is likely hosted there. The domain locks help stop unauthorized transfers. No registrant details were shown, so privacy protection is likely on.
 
-![whois](screenshots/1_whois.png)
-![alt text]()
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/whois.png)
 
 #### Tool 2: WhatWeb
 
@@ -156,7 +158,7 @@ dnsrecon -d networkwalks.com
 
 ![dnsrecon](screenshots/6_dnsrecon.png)
 
-### 4.2 W2-PM4: theHarvester on microsoft.com
+### 4.2 theHarvester on microsoft.com
 
 theHarvester is passive. It reads public sources and does not scan the target.
 
@@ -195,7 +197,9 @@ Example subdomains: `azure.microsoft.com`, `learn.microsoft.com`, `careers.micro
 
 ![all sources](screenshots/8_theharvester_all.png)
 
-### 4.3 W2-PM5: Network scanning with Zenmap
+### 4.3 Network scanning with Zenmap
+
+For the second activity, I used Zenmap to perform network discovery on my local network. The practical required me to identify my local IP address and subnet, discover live hosts, identify their IP and MAC addresses, and generate a network topology.
 
 #### Task 1: Install Zenmap
 
@@ -243,19 +247,8 @@ The topology was saved as a PDF on the desktop with the legend enabled: `zenmap_
 
 ![topology](screenshots/12_zenmap_topology.png)
 
-## 5. Troubleshooting
 
-### Temporary DNS failure in Kali
-
-- **Issue:** Ping and Wafw00f failed with "Temporary failure in name resolution". Wafw00f also wrongly said the site was down. theHarvester showed "Could not contact DNS servers" for some sources.
-- **Fix:** [confirm what fixed it]. After DNS recovered, I re-ran the commands and they worked. I also set two DNS servers for stability:
-```
-sudo nmcli connection modify "Wired connection 1" ipv4.dns "8.8.8.8 1.1.1.1"
-sudo nmcli connection up "Wired connection 1"
-```
-- **Lesson:** a failed scan can be a local network problem, not a target problem. Check DNS first.
-
-## 6. Risk Analysis / Impact
+## 5. Risk Analysis / Impact
 
 These are observations from information gathering. They are not confirmed vulnerabilities. No exploitation was done.
 
@@ -269,7 +262,8 @@ These are observations from information gathering. They are not confirmed vulner
 | 6 | Many old or test hostnames public | theHarvester: 763 hosts | Forgotten systems may be unpatched | Medium |
 | 7 | Unidentified devices on home network | Zenmap: 2 unknown Liteon devices | Unknown devices need to be verified | Medium |
 
-## 7. Recommendations
+## 6. Recommendations
+Based on the observations from these activities, I recommend the following security improvements:
 
 1. **Limit version exposure.** Hide CMS and plugin versions where possible.
 2. **Keep software updated.** Update WordPress, plugins and server software often.
@@ -281,7 +275,7 @@ These are observations from information gathering. They are not confirmed vulner
 8. **Check your own network.** Identify every device and remove unknown ones.
 9. **Test with permission only.** Scan only systems you own or are allowed to test.
 
-## 8. Conclusion
+## 7. Conclusion
 
 In Week 2, I footprinted a domain with six Kali tools, collected public host data with theHarvester, and found live hosts on my own network with Zenmap.
 
@@ -292,7 +286,7 @@ Key lessons:
 - Findings must be reported as observations. A visible version number is not proof of a vulnerability.
 - Always work within permission.
 
-## 9. Evidence
+## 8. Evidence
 
 All screenshots are in the `screenshots/` folder:
 
