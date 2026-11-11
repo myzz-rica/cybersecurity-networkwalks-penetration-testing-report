@@ -93,7 +93,8 @@ whatweb networkwalks.com
 
 **Why it matters:** CMS and plugin versions are visible. An attacker can use them to look for known issues in that software.
 
-![whatweb](screenshots/2_whatweb.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/whtaweb.png)
+
 
 #### Tool 3: Nslookup
 
@@ -105,7 +106,8 @@ Result: the domain resolves to **192.232.216.135** (non-authoritative answer fro
 
 **Why it matters:** it confirms the real server IP, which is the starting point for further testing.
 
-![nslookup](screenshots/3_nslookup.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/nslookup.png)
+
 
 #### Tool 4: Curl
 
@@ -125,7 +127,8 @@ curl -I https://networkwalks.com
 
 **Why it matters:** headers confirm the technology. The missing security headers are an observation to review. A HEAD request may not show every header, so this is not a confirmed weakness.
 
-![curl](screenshots/4_curl.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/curl.png)
+
 
 #### Tool 5: Wafw00f
 
@@ -137,7 +140,8 @@ Result: the site is behind the **ModSecurity (SpiderLabs)** WAF, found in 2 requ
 
 **Why it matters:** a WAF blocks many basic web attacks. Knowing which WAF is used helps an attacker plan.
 
-![wafw00f](screenshots/5_wafw00f.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/waf.png)
+
 
 #### Tool 6: DNSRecon
 
@@ -156,7 +160,8 @@ dnsrecon -d networkwalks.com
 
 **Why it matters:** the web and mail servers share one IP. The SRV records show cPanel hosting. This gives a map of the DNS setup.
 
-![dnsrecon](screenshots/6_dnsrecon.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/dns.png)
+
 
 ### 4.2 theHarvester on microsoft.com
 
@@ -170,7 +175,7 @@ theHarvester -d microsoft.com -l 1000 -b baidu
 
 Result: no IPs, emails, people or hosts. The run completed without errors. This only means Baidu returned nothing, not that Microsoft has no emails or subdomains.
 
-![baidu](screenshots/7_theharvester_baidu.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/harvester%20installed.png)
 
 #### Task 2: All sources, limit 50
 
@@ -195,7 +200,8 @@ Example subdomains: `azure.microsoft.com`, `learn.microsoft.com`, `careers.micro
 - The `-l 50` limit applies per source, so the total was higher than 50.
 - Some results are noisy, such as `2Fblogs.microsoft.com`, where `2F` is a URL-encoded slash.
 
-![all sources](screenshots/8_theharvester_all.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/b%20all.png)
+
 
 ### 4.3 Network scanning with Zenmap
 
@@ -205,7 +211,8 @@ For the second activity, I used Zenmap to perform network discovery on my local 
 
 Downloaded Nmap from nmap.org and installed it with the Zenmap component. Version: **Zenmap 7.991**.
 
-![install](screenshots/9_zenmap_install.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/zenmap%20opened.png)
+
 
 #### Task 2: Find IP and subnet
 
@@ -222,7 +229,8 @@ ipconfig
 
 Subnet method: the mask 255.255.255.0 keeps the first three parts of the IP fixed. I set the last part to 0 and added the /24 prefix.
 
-![ipconfig](screenshots/10_ipconfig.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/cmd.png)
+
 
 #### Tasks 3 to 6: Live hosts
 
@@ -239,13 +247,13 @@ Result: **4 hosts up** out of 256 addresses, scanned in 4.38 seconds.
 
 **Why it matters:** an unknown device on a network should be checked. Nmap does not show a MAC for the machine it runs on. Only devices that answer pings appear.
 
-![scan](screenshots/11_zenmap_scan.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/nmap%20scan.png)
 
 #### Task 7: Topology
 
 The topology was saved as a PDF on the desktop with the legend enabled: `zenmap_topology.pdf`.
 
-![topology](screenshots/12_zenmap_topology.png)
+![alt text](https://github.com/myzz-rica/cybersecurity-networkwalks-penetration-testing-report/blob/main/images/zenmap%20scan.png)
 
 
 ## 5. Risk Analysis / Impact
@@ -286,25 +294,5 @@ Key lessons:
 - Findings must be reported as observations. A visible version number is not proof of a vulnerability.
 - Always work within permission.
 
-## 8. Evidence
-
-All screenshots are in the `screenshots/` folder:
-
-| File | Content |
-| --- | --- |
-| 1_whois.png | WHOIS output |
-| 2_whatweb.png | WhatWeb output |
-| 3_nslookup.png | Nslookup output |
-| 4_curl.png | Curl headers |
-| 5_wafw00f.png | Wafw00f result |
-| 6_dnsrecon.png | DNSRecon records |
-| 7_theharvester_baidu.png | theHarvester with Baidu |
-| 8_theharvester_all.png | theHarvester with all sources |
-| 9_zenmap_install.png | Zenmap installed |
-| 10_ipconfig.png | IP and subnet |
-| 11_zenmap_scan.png | Zenmap scan results |
-| 12_zenmap_topology.png | Topology |
-
-Output text files (`whois_networkwalks.txt`, `whatweb_networkwalks.txt`, and the others) are also saved with this report.
 
 -End-
